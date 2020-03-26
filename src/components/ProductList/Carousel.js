@@ -1,5 +1,8 @@
 import React from 'react';
 import Carousel from 'react-bootstrap/Carousel';
+import { useQuery } from '@apollo/react-hooks';
+
+import { GET_CAROUSELS } from './queries';
 
 const styles = {
   carouselText: {
@@ -12,15 +15,19 @@ const styles = {
 };
 
 export default () => {
-  const carousel = [];
+  const { loading, error, data } = useQuery(GET_CAROUSELS);
+  if (loading) return 'Loading...';
+  if (error) return 'Something went wrong. Please refresh the page.';
+  console.info('===data===', data);
+  const { carousels = []} = data;
 
   return (
     <Carousel>
-      {carousel.map((item, index) => (
+      {carousels.map((item, index) => (
         <Carousel.Item key={`carousel-${index}`}>
           <img
             className="d-block h-60 w-100"
-            src={item.image_url}
+            src={item.imageUrl}
             alt="First slide"
             crossOrigin="anonymous"
           />
