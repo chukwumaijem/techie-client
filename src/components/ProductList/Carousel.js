@@ -10,7 +10,10 @@ const styles = {
     backgroundColor: 'rgba(0, 0, 0, 0.3)'
   },
   carouselDescription: {
-    lineClamp: '2'
+    display: '-webkit-box',
+    WebkitBoxOrient: 'vertical',
+    WebkitLineClamp: 2,
+    overflow: 'hidden'
   }
 };
 
@@ -18,13 +21,12 @@ export default () => {
   const { loading, error, data } = useQuery(GET_CAROUSELS);
   if (loading) return 'Loading...';
   if (error) return 'Something went wrong. Please refresh the page.';
-  console.info('===data===', data);
-  const { carousels = []} = data;
+  const { carousels = [] } = data;
 
   return (
     <Carousel>
-      {carousels.map((item, index) => (
-        <Carousel.Item key={`carousel-${index}`}>
+      {carousels.map(item => (
+        <Carousel.Item key={item.id}>
           <img
             className="d-block h-60 w-100"
             src={item.imageUrl}
