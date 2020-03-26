@@ -3,6 +3,7 @@ import Container from 'react-bootstrap/Container';
 import { Switch, Route } from 'react-router-dom';
 
 import NavBar from './components/Navbar/Navbar';
+import ProductPage from './pages/index';
 
 function App() {
   return (
@@ -10,7 +11,7 @@ function App() {
       <NavBar />
       <Container>
         <Switch>
-          <Route path="/" exact component={() => 'Hi'} />
+          <Route path="/" exact component={ProductPage} />
           <Route path="*" exact component={() => '404'} />
         </Switch>
       </Container>
