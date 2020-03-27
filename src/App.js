@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import Container from 'react-bootstrap/Container';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 
 import NavBar from './shared/components/Navbar/Navbar';
 import ProductPage from './pages/ProductList/containers/ProductList';
@@ -13,6 +13,7 @@ function App() {
       <Container>
         <Switch>
           <Route path="/" exact component={ProductPage} />
+          <Route path="/products" exact component={() => <Redirect to="/" />} />
           <Route path="/products/:id" exact component={ProductDetailPage} />
           <Route path="*" exact component={() => '404'} />
         </Switch>
