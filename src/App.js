@@ -3,7 +3,7 @@ import Container from 'react-bootstrap/Container';
 import { Switch, Route } from 'react-router-dom';
 
 import NavBar from './components/Navbar/Navbar';
-import ProductPage from './pages/index';
+import ProductPage from './components/ProductList/ProductList';
 
 function App() {
   return (
