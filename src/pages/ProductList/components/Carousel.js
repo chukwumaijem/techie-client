@@ -2,7 +2,7 @@ import React from 'react';
 import Carousel from 'react-bootstrap/Carousel';
 import { useQuery } from '@apollo/react-hooks';
 
-import { GET_CAROUSELS } from './queries';
+import { GET_CAROUSELS } from '../queries';
 
 const styles = {
   carouselText: {
