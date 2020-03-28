@@ -5,6 +5,7 @@ export const GET_PRODUCT = gql`
   query Product($productId: String!) {
     product(productId: $productId) {
       ...cardProduct
+      description
       model
       company
       department
