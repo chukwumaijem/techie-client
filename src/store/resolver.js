@@ -40,6 +40,12 @@ export const resolvers = {
         found,
         __typename: `product_${productId}`
       };
+    },
+    productQuantity: (_, { productId }, { cache }) => {
+      const { cart } = cache.readQuery({ query: GET_CART_INFORMATION });
+      const product = cart.items.find(item => item.productId = productId);
+
+      return product.quantity;
     }
   }
 };
