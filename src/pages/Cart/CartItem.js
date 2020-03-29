@@ -1,6 +1,10 @@
 import React from 'react';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
+import { useQuery } from '@apollo/react-hooks';
+import get from 'lodash/get';
+
+import { GET_PRODUCT_QUANTITY } from '../../store/queries';
 
 const styles = {
   cartItem: {
@@ -20,6 +24,14 @@ const styles = {
 };
 
 const CartPage = ({ item }) => {
+  const { data } = useQuery(GET_PRODUCT_QUANTITY, {
+    variables: {
+      productId: item.id
+    }
+  });
+
+  const quantity = get(data, 'quantity', 1);
+
   return (
     <Card style={styles.cartItem}>
       <img src={item.imageUrl} alt={item.name} style={styles.cartImage} />
@@ -27,9 +39,14 @@ const CartPage = ({ item }) => {
         Maker: {item.company}
         <h6>{item.name}</h6>
       </div>
+      <div>
+        +1 Button
+        {quantity}
+        -1 Button
+      </div>
       <div style={styles.twoLine}>
         <p>Unit Price: {item.price}</p>
-        <p>Total Price: {item.price}</p>
+        <p>Total Price: {item.price * quantity}</p>
       </div>
       <Button variant="danger" size="sm" style={{ height: '50px' }}>
         Remove

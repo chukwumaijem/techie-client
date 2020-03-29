@@ -22,3 +22,10 @@ export const IS_PRODUCT_IN_CART = gql`
     }
   }
 `;
+
+export const GET_PRODUCT_QUANTITY = gql`
+  query Quantity($productId: String!) {
+    quantity(productId: $productId) @client
+  }
+`;
+

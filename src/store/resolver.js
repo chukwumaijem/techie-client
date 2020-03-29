@@ -26,7 +26,7 @@ export const resolvers = {
     }
   },
   Query: {
-    getCartItems: (_, _args, { cache }) => {
+    cart: (_, _args, { cache }) => {
       const { cart } = cache.readQuery({ query: GET_CART_INFORMATION });
 
       return cart;
@@ -41,9 +41,9 @@ export const resolvers = {
         __typename: `product_${productId}`
       };
     },
-    productQuantity: (_, { productId }, { cache }) => {
+    quantity: (_, { productId }, { cache }) => {
       const { cart } = cache.readQuery({ query: GET_CART_INFORMATION });
-      const product = cart.items.find(item => item.productId = productId);
+      const product = cart.items.find(item => (item.productId === productId));
 
       return product.quantity;
     }
