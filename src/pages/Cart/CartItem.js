@@ -14,12 +14,24 @@ const styles = {
     flexDirection: 'row'
   },
   cartImage: {
-    width: '150px'
+    width: '15%'
   },
   twoLine: {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-around'
+  },
+  itemInfoContainer: {
+    width: '30%'
+  },
+  quantiyButtons: {
+    margin: '10px'
+  },
+  quantiyButtonsContainer: {
+    width: '10%'
+  },
+  priceContainer: {
+    width: '10%'
   }
 };
 
@@ -35,16 +47,20 @@ const CartPage = ({ item }) => {
   return (
     <Card style={styles.cartItem}>
       <img src={item.imageUrl} alt={item.name} style={styles.cartImage} />
-      <div style={styles.twoLine}>
+      <div style={{ ...styles.twoLine, ...styles.itemInfoContainer }}>
         Maker: {item.company}
         <h6>{item.name}</h6>
       </div>
-      <div>
-        +1 Button
+      <div style={styles.quantiyButtonsContainer}>
+        <Button size="sm" variant="secondary" style={styles.quantiyButtons}>
+          -
+        </Button>
         {quantity}
-        -1 Button
+        <Button size="sm" variant="secondary" style={styles.quantiyButtons}>
+          +
+        </Button>
       </div>
-      <div style={styles.twoLine}>
+      <div style={{ ...styles.twoLine, ...styles.priceContainer }}>
         <p>Unit Price: {item.price}</p>
         <p>Total Price: {item.price * quantity}</p>
       </div>
