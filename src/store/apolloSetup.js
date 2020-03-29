@@ -7,9 +7,6 @@ import { ApolloLink } from 'apollo-link';
 import { resolvers } from './resolver';
 
 const link = ApolloLink.from([
-  new HttpLink({
-    uri: process.env.REACT_APP_SERVER_PATH
-  }),
   onError(({ graphQLErrors, networkError }) => {
     if (graphQLErrors)
       graphQLErrors.forEach(({ message, locations, path }) =>
@@ -18,6 +15,9 @@ const link = ApolloLink.from([
         )
       );
     if (networkError) console.log(`[Network error]: ${networkError}`);
+  }),
+  new HttpLink({
+    uri: process.env.REACT_APP_SERVER_PATH
   })
 ]);
 
@@ -29,7 +29,7 @@ cache.writeData({
       items: [],
       total: 0,
       __typename: 'CART_INFORMATION'
-    },
+    }
   }
 });
 
