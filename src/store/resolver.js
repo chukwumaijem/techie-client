@@ -23,6 +23,32 @@ export const resolvers = {
         }
       });
       return null;
+    },
+    increaseOrDecreaseProductQuantity: (_, { productId, value }, { cache }) => {
+      const { cart } = cache.readQuery({ query: GET_CART_INFORMATION });
+      const { total, items } = cart;
+      const productIndex = items.findIndex(
+        item => item.productId === productId
+      );
+      const cartItems = [
+        ...items.slice(0, productIndex),
+        {
+          productId: items[productIndex].productId,
+          quantity: items[productIndex].quantity + value
+        },
+        ...items.slice(productIndex + 1)
+      ];
+      cache.writeQuery({
+        query: GET_CART_INFORMATION,
+        data: {
+          cart: {
+            items: cartItems,
+            total: total + value,
+            __typename: 'CART_INFORMATION'
+          }
+        }
+      });
+      return null;
     }
   },
   Query: {
@@ -43,7 +69,7 @@ export const resolvers = {
     },
     quantity: (_, { productId }, { cache }) => {
       const { cart } = cache.readQuery({ query: GET_CART_INFORMATION });
-      const product = cart.items.find(item => (item.productId === productId));
+      const product = cart.items.find(item => item.productId === productId);
 
       return product.quantity;
     }

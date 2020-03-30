@@ -29,3 +29,8 @@ export const GET_PRODUCT_QUANTITY = gql`
   }
 `;
 
+export const CHANGE_PRODUCT_QUANTITY = gql`
+  mutation increaseOrDecreaseProductQuantity($productId: String!, $value: Int) {
+    increaseOrDecreaseProductQuantity(productId: $productId, value: $value) @client
+  }
+`;
