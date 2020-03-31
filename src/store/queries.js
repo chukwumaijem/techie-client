@@ -34,3 +34,10 @@ export const CHANGE_PRODUCT_QUANTITY = gql`
     increaseOrDecreaseProductQuantity(productId: $productId, value: $value) @client
   }
 `;
+
+export const REMOVE_FROM_CART = gql`
+  mutation removeFromCart($productId: String!) {
+    removeFromCart(productId: $productId) @client
+  }
+`;
+

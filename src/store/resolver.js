@@ -49,6 +49,25 @@ export const resolvers = {
         }
       });
       return null;
+    },
+    removeFromCart: (_, { productId }, { cache }) => {
+      const { cart } = cache.readQuery({ query: GET_CART_INFORMATION });
+      const { total, items } = cart;
+      const productIndex = items.findIndex(
+        item => item.productId === productId
+      );
+      const [removedProduct] = items.splice(productIndex, 1);
+      cache.writeQuery({
+        query: GET_CART_INFORMATION,
+        data: {
+          cart: {
+            items,
+            total: total - removedProduct.quantity,
+            __typename: 'CART_INFORMATION'
+          }
+        }
+      });
+      return null;
     }
   },
   Query: {

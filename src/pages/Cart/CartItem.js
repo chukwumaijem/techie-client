@@ -6,7 +6,8 @@ import get from 'lodash/get';
 
 import {
   GET_PRODUCT_QUANTITY,
-  CHANGE_PRODUCT_QUANTITY
+  CHANGE_PRODUCT_QUANTITY,
+  REMOVE_FROM_CART
 } from '../../store/queries';
 
 const styles = {
@@ -46,6 +47,7 @@ const CartPage = ({ item }) => {
   });
 
   const [changeProductQuantity] = useMutation(CHANGE_PRODUCT_QUANTITY);
+  const [removeFromCart] = useMutation(REMOVE_FROM_CART);
   const quantity = get(data, 'quantity', 1);
 
   const handleAddOrMinusClick = e => {
@@ -59,6 +61,15 @@ const CartPage = ({ item }) => {
     });
     refetch();
   };
+
+  const handleRemoveFromCart = (e) => {
+    e.preventDefault();
+    removeFromCart({
+      variables: {
+        productId: item.id,
+      }
+    });
+  }
 
   return (
     <Card style={styles.cartItem}>
@@ -91,7 +102,7 @@ const CartPage = ({ item }) => {
         <p>Unit Price: ${item.price}</p>
         <p>Total Price: ${item.price * quantity}</p>
       </div>
-      <Button variant="danger" size="sm" style={{ height: '50px' }}>
+      <Button variant="danger" size="sm" style={{ height: '50px' }} onClick={handleRemoveFromCart}>
         Remove
       </Button>
     </Card>
