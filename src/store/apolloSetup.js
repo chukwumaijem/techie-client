@@ -28,6 +28,7 @@ cache.writeData({
     cart: {
       items: [],
       total: 0,
+      totalAmount: 0,
       __typename: 'CART_INFORMATION'
     }
   }

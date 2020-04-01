@@ -37,19 +37,20 @@ export default withRouter(({ match }) => {
   const found = get(isInCart, 'isInCart.found', false);
   const [addProductToCart] = useMutation(ADD_PRODUCT_TO_CART);
 
+  if (loading) return 'Loading...';
+  if (error) return 'Something went wrong. Please refresh the page.';
+  const { product } = data;
+
   const handleAddToCart = e => {
     e.preventDefault();
     addProductToCart({
       variables: {
-        productId: product.id
+        productId: product.id,
+        price: product.price
       }
     });
     refetch();
   };
-
-  if (loading) return 'Loading...';
-  if (error) return 'Something went wrong. Please refresh the page.';
-  const { product } = data;
 
   return (
     <Fragment>

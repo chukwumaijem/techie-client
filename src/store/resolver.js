@@ -4,8 +4,8 @@ export const resolvers = {
   Mutation: {
     addToCart: (_, product, { cache }) => {
       const { cart } = cache.readQuery({ query: GET_CART_INFORMATION });
-      const { items, total } = cart;
-      const { productId } = product;
+      const { items, total, totalAmount } = cart;
+      const { productId, price } = product;
       cache.writeQuery({
         query: GET_CART_INFORMATION,
         data: {
@@ -18,15 +18,20 @@ export const resolvers = {
               }
             ],
             total: total + 1,
+            totalAmount: totalAmount + price,
             __typename: 'CART_INFORMATION'
           }
         }
       });
       return null;
     },
-    increaseOrDecreaseProductQuantity: (_, { productId, value }, { cache }) => {
+    increaseOrDecreaseProductQuantity: (
+      _,
+      { productId, value, price },
+      { cache }
+    ) => {
       const { cart } = cache.readQuery({ query: GET_CART_INFORMATION });
-      const { total, items } = cart;
+      const { total, items, totalAmount } = cart;
       const productIndex = items.findIndex(
         item => item.productId === productId
       );
@@ -44,15 +49,16 @@ export const resolvers = {
           cart: {
             items: cartItems,
             total: total + value,
+            totalAmount: totalAmount + price,
             __typename: 'CART_INFORMATION'
           }
         }
       });
       return null;
     },
-    removeFromCart: (_, { productId }, { cache }) => {
+    removeFromCart: (_, { productId, price }, { cache }) => {
       const { cart } = cache.readQuery({ query: GET_CART_INFORMATION });
-      const { total, items } = cart;
+      const { total, items, totalAmount } = cart;
       const productIndex = items.findIndex(
         item => item.productId === productId
       );
@@ -63,6 +69,7 @@ export const resolvers = {
           cart: {
             items,
             total: total - removedProduct.quantity,
+            totalAmount: totalAmount + removedProduct.quantity * price,
             __typename: 'CART_INFORMATION'
           }
         }
@@ -91,6 +98,11 @@ export const resolvers = {
       const product = cart.items.find(item => item.productId === productId);
 
       return product.quantity;
+    },
+    cartTotalAmount: (_, product, { cache }) => {
+      const { cart } = cache.readQuery({ query: GET_CART_INFORMATION });
+
+      return cart.totalAmount;
     }
   }
 };

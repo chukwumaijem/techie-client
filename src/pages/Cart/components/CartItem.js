@@ -8,7 +8,7 @@ import {
   GET_PRODUCT_QUANTITY,
   CHANGE_PRODUCT_QUANTITY,
   REMOVE_FROM_CART
-} from '../../store/queries';
+} from '../../../store/queries';
 
 const styles = {
   cartItem: {
@@ -56,7 +56,8 @@ const CartPage = ({ item }) => {
     changeProductQuantity({
       variables: {
         productId: item.id,
-        value: Number(`${innerHTML}1`)
+        value: Number(`${innerHTML}1`),
+        price: item.price,
       }
     });
     refetch();
@@ -67,6 +68,7 @@ const CartPage = ({ item }) => {
     removeFromCart({
       variables: {
         productId: item.id,
+        price: item.price,
       }
     });
   }

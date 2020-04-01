@@ -5,13 +5,14 @@ export const GET_CART_INFORMATION = gql`
     cart @client {
       items
       total
+      totalAmount
     }
   }
 `;
 
 export const ADD_PRODUCT_TO_CART = gql`
-  mutation addToCart($productId: String!) {
-    addToCart(productId: $productId) @client
+  mutation addToCart($productId: String!, $price: Float) {
+    addToCart(productId: $productId, price: $price) @client
   }
 `;
 
@@ -30,8 +31,16 @@ export const GET_PRODUCT_QUANTITY = gql`
 `;
 
 export const CHANGE_PRODUCT_QUANTITY = gql`
-  mutation increaseOrDecreaseProductQuantity($productId: String!, $value: Int) {
-    increaseOrDecreaseProductQuantity(productId: $productId, value: $value) @client
+  mutation increaseOrDecreaseProductQuantity(
+    $productId: String!
+    $value: Int
+    $price: Float
+  ) {
+    increaseOrDecreaseProductQuantity(
+      productId: $productId
+      value: $value
+      price: $price
+    ) @client
   }
 `;
 
@@ -41,3 +50,8 @@ export const REMOVE_FROM_CART = gql`
   }
 `;
 
+export const GET_CART_TOTAL_AMOUNT = gql`
+  {
+    cartTotalAmount @client
+  }
+`;

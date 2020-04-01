@@ -64,7 +64,8 @@ export default memo(({ product }) => {
     e.preventDefault();
     addProductToCart({
       variables: {
-        productId: product.id
+        productId: product.id,
+        price: product.price,
       }
     });
     refetch();
