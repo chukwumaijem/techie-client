@@ -11,14 +11,14 @@ import { GET_CART_TOTAL_AMOUNT } from '../../../store/queries';
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
 const Checkout = withRouter(({ location }) => {
-  const { paymentType } = location.state;
-  if (!paymentType) return <Redirect to="/cart" />;
-
   const { data, loading } = useQuery(GET_CART_TOTAL_AMOUNT, {
     fetchPolicy: 'no-cache'
   });
   if (loading) return 'Loading data...';
   const cartTotalAmount = get(data, 'cartTotalAmount', 0);
+
+  const { paymentType } = location.state;
+  if (!paymentType || !cartTotalAmount) return <Redirect to="/cart" />;
 
   return (
     <Fragment>
