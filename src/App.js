@@ -5,7 +5,8 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import NavBar from './shared/components/Navbar/Navbar';
 import ProductPage from './pages/ProductList/containers/ProductList';
 import ProductDetailPage from './pages/Product/ProductDetail';
-import CartPage from './pages/Cart/CartPage';
+import CartPage from './pages/Cart/containers/CartPage';
+import Checkout from './pages/Checkout/containers/Checkout';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/products" exact component={() => <Redirect to="/" />} />
           <Route path="/products/:id" exact component={ProductDetailPage} />
           <Route path="/cart" exact component={CartPage} />
+          <Route path="/checkout" exact component={Checkout} />
           <Route path="*" exact component={() => '404'} />
         </Switch>
       </Container>

@@ -1,10 +1,14 @@
 import React, { Fragment } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import get from 'lodash/get';
+import { Link } from 'react-router-dom';
+import Button from 'react-bootstrap/Button';
 
-import { GET_CART_PRODUCTS_DETAILS } from './queries';
-import { GET_CART_INFORMATION } from '../../store/queries';
-import CartItem from './CartItem';
+import { GET_CART_PRODUCTS_DETAILS } from '../queries';
+import { GET_CART_INFORMATION } from '../../../store/queries';
+import CartItem from '../components/CartItem';
+
+const paymentMethods = ['Stripe'];
 
 const CartPage = () => {
   const { data: cartItems } = useQuery(GET_CART_INFORMATION);
@@ -27,6 +31,17 @@ const CartPage = () => {
       <h4>Cart</h4>
       {cartProducts.map(item => (
         <CartItem item={item} key={item.id} />
+      ))}
+      {paymentMethods.map(paymentType => (
+        <Link
+          to={{
+            pathname: '/checkout',
+            state: { paymentType }
+          }}
+          key={paymentType}
+        >
+          <Button>{paymentType}</Button>
+        </Link>
       ))}
     </Fragment>
   );
