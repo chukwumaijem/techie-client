@@ -166,3 +166,4 @@ export default ({ amount }) => {
     </div>
   );
 };
+// Todo: Refactor code, move form to separate component, show success message
