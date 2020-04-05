@@ -4,6 +4,9 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Toast from 'react-bootstrap/Toast';
+import { useLazyQuery } from '@apollo/react-hooks';
+
+import { CREATE_PAYMENT_INTENT } from '../../../store/queries';
 
 const styles = {
   container: {
@@ -29,17 +32,53 @@ const styles = {
     margin: '20px'
   }
 };
+
+const stripeOptions = {
+  hidePostalCode: true
+};
+
 export default ({ amount }) => {
   const stripe = useStripe();
   const elements = useElements();
+  let billingDetails = {};
+  const [createPaymentIntent] = useLazyQuery(CREATE_PAYMENT_INTENT, {
+    onCompleted: async ({ createPaymentIntent }) => {
+      const cardElement = elements.getElement(CardElement);
+      try {
+        const {
+          paymentMethod,
+          error: paymentMethodError
+        } = await stripe.createPaymentMethod({
+          type: 'card',
+          card: cardElement,
+          billing_details: billingDetails
+        });
+        if (paymentMethodError) throw new Error(paymentMethodError.message);
+
+        const {
+          paymentIntent,
+          error: paymentIntentError
+        } = await stripe.confirmCardPayment(createPaymentIntent.clientSecret, {
+          payment_method: paymentMethod.id
+        });
+
+        if (paymentIntentError) throw new Error(paymentIntentError.message);
+        console.log('[paymentIntent]', paymentIntent);
+      } catch (error) {
+        setStripeError(error.message);
+      } finally {
+        setIsSubmitting(false);
+      }
+    }
+  });
 
   const [stripeError, setStripeError] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = async event => {
+  const handleSubmit = event => {
     event.preventDefault();
-    if (!stripe || !elements) return;
-
-    const billingDetails = {
+    setIsSubmitting(true);
+    billingDetails = {
       name: event.target.name.value,
       email: event.target.email.value,
       address: {
@@ -50,19 +89,11 @@ export default ({ amount }) => {
       }
     };
 
-    const cardElement = elements.getElement(CardElement);
-    const { error, paymentMethod } = await stripe.createPaymentMethod({
-      type: 'card',
-      card: cardElement,
-      billing_details: billingDetails
+    createPaymentIntent({
+      variables: {
+        amount: amount * 100
+      }
     });
-
-    if (error) {
-      console.log('[error]', error);
-      setStripeError(error.message);
-    } else {
-      console.log('[PaymentMethod]', paymentMethod);
-    }
   };
 
   return (
@@ -109,10 +140,15 @@ export default ({ amount }) => {
 
         <Form.Group id="formGridCardDetails">
           <Form.Label>Card Details</Form.Label>
-          <CardElement />
+          <CardElement options={stripeOptions} />
         </Form.Group>
 
-        <Button variant="primary" type="submit" style={styles.button}>
+        <Button
+          variant="primary"
+          type="submit"
+          style={styles.button}
+          disabled={isSubmitting || !stripe || !elements}
+        >
           Pay ${amount}
         </Button>
 

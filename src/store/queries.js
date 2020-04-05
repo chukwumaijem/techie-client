@@ -55,3 +55,13 @@ export const GET_CART_TOTAL_AMOUNT = gql`
     cartTotalAmount @client
   }
 `;
+
+export const CREATE_PAYMENT_INTENT = gql`
+  query createPaymentIntent($amount: Int!) {
+    createPaymentIntent(amount: $amount) {
+      success
+      message
+      clientSecret
+    }
+  }
+`;
