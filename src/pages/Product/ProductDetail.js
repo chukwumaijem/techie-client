@@ -1,10 +1,12 @@
 import React, { Fragment } from 'react';
 import { withRouter } from 'react-router-dom';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
+import get from 'lodash/get';
 
 import { GET_PRODUCT } from './queries';
+import { IS_PRODUCT_IN_CART, ADD_PRODUCT_TO_CART } from '../../store/queries';
 
 const styles = {
   cardBody: {
@@ -27,10 +29,28 @@ export default withRouter(({ match }) => {
   const { loading, error, data } = useQuery(GET_PRODUCT, {
     variables: { productId }
   });
+  const { data: isInCart, refetch } = useQuery(IS_PRODUCT_IN_CART, {
+    variables: {
+      productId
+    }
+  });
+  const found = get(isInCart, 'isInCart.found', false);
+  const [addProductToCart] = useMutation(ADD_PRODUCT_TO_CART);
 
   if (loading) return 'Loading...';
   if (error) return 'Something went wrong. Please refresh the page.';
   const { product } = data;
+
+  const handleAddToCart = e => {
+    e.preventDefault();
+    addProductToCart({
+      variables: {
+        productId: product.id,
+        price: product.price
+      }
+    });
+    refetch();
+  };
 
   return (
     <Fragment>
@@ -42,7 +62,9 @@ export default withRouter(({ match }) => {
           <Card.Title>Maker: {product.company}</Card.Title>
           <Card.Title>Department: {product.department}</Card.Title>
           <Card.Title>${product.price}</Card.Title>
-          <Button variant="primary">Add to Cart</Button>
+          <Button variant="primary" disabled={found} onClick={handleAddToCart}>
+            {found ? 'In Cart' : 'Add to Cart'}
+          </Button>
         </Card.Body>
       </Card>
       <div>

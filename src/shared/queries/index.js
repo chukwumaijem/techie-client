@@ -5,7 +5,6 @@ export const PRODUCT_FRAGMENT = gql`
     id
     name
     price
-    description
     imageUrl
   }
 `;

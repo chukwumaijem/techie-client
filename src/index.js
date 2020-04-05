@@ -1,15 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
-import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from '@apollo/react-hooks';
 
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-
-const client = new ApolloClient({
-  uri: process.env.REACT_APP_SERVER_PATH
-});
+import client from './store/apolloSetup';
 
 ReactDOM.render(
   <BrowserRouter>

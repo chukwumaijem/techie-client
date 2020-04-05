@@ -17,6 +17,7 @@ export const GET_PRODUCTS = gql`
     products(pageNumber: $pageNumber) {
       products {
         ...cardProduct
+        description
       }
       total
     }
